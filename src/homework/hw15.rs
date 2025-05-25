@@ -1,46 +1,45 @@
-use std::collections::HashSet;
+fn main() {
+    let digits = [1, 2, 3, 4, 5, 6, 7, 8];
+    let mut count = 0;
 
-fn solve_cryptarithm() {
-    let digits = 1..=8;
+    permute(&mut digits.map(|x| x as u32).to_vec(), 0, &mut |perm| {
+        let m = perm[0];
+        let u = perm[1];
+        let x = perm[2];
+        let a = perm[3];
+        let s = perm[4];
+        let l = perm[5];
+        let o = perm[6];
+        let n = perm[7];
 
-    let mut solutions = Vec::new();
+        let muxa = m * 1000 + u * 100 + x * 10 + a;
+        let slon = s * 1000 + l * 100 + o * 10 + n;
 
-    // Перебираємо усі можливі цифри для літер
-    for &m in digits.clone().collect::<Vec<_>>().iter() {
-    for &u in digits.clone().collect::<Vec<_>>().iter() {
-    for &x in digits.clone().collect::<Vec<_>>().iter() {
-    for &a in digits.clone().collect::<Vec<_>>().iter() {
-    for &s in digits.clone().collect::<Vec<_>>().iter() {
-    for &l in digits.clone().collect::<Vec<_>>().iter() {
-    for &o in digits.clone().collect::<Vec<_>>().iter() {
-    for &n in digits.clone().collect::<Vec<_>>().iter() {
-
-        let letters = [m,u,x,a,s,l,o,n];
-        let unique: HashSet<_> = letters.iter().cloned().collect();
-        if unique.len() != letters.len() {
-            continue; // Цифри мають бути різні
+        if muxa * a == slon {
+            println!("  {}{}{}{}", m, u, x, a);
+            println!("x       {}", a);
+            println!("  ------");
+            println!("    {}{}{}{}", s, l, o, n);
+            println!();
+            count += 1;
         }
+    });
 
-        let num1 = m*1000 + u*100 + x*10 + a;
-        let num2 = a;
-        let product = s*1000 + l*100 + o*10 + n;
-
-        if num1 * num2 == product {
-            solutions.push((m,u,x,a,s,l,o,n));
-        }
-    }}}}}}}
-
-    println!("Знайдено {} рішень:", solutions.len());
-    for (m,u,x,a,s,l,o,n) in solutions {
-        println!("  {}{}{}{} * {} = {}{}{}{}", m,u,x,a,a,s,l,o,n);
-        println!("  {:4}", m*1000 + u*100 + x*10 + a);
-        println!("* {:1}", a);
-        println!("-------");
-        println!("{:4}", s*1000 + l*100 + o*10 + n);
-        println!();
-    }
+    println!("Знайдено рішень: {}", count);
 }
 
-fn main() {
-    solve_cryptarithm();
+fn permute<F>(arr: &mut Vec<u32>, start: usize, f: &mut F)
+where
+    F: FnMut(&Vec<u32>),
+{
+    if start == arr.len() {
+        f(arr);
+        return;
+    }
+
+    for i in start..arr.len() {
+        arr.swap(start, i);
+        permute(arr, start + 1, f);
+        arr.swap(start, i);
+    }
 }
