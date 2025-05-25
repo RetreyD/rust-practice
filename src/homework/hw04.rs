@@ -1,26 +1,26 @@
-const HEIGHT: usize = 11;
-const WIDTH: usize = 21;
-
 fn main() {
-    let mut output = String::new();
+    let height: usize = 11;
+    let mid = height / 2;
 
-    let mid = HEIGHT / 2;
+    for y in 0..height {
+        let dx = if y <= mid {
+            mid - y
+        } else {
+            y - mid
+        };
+        let stars = height - 2 * dx;
+        let spaces = dx;
 
-    for y in 0..HEIGHT {
-        for x in 0..WIDTH {
-            let dx = if y <= mid {
-                mid - y
-            } else {
-                y - mid
-            };
-            if x == dx || x == WIDTH - 1 - dx {
-                output.push('*');
-            } else {
-                output.push(' ');
-            }
+        // Друкуємо пробіли
+        for _ in 0..spaces {
+            print!(" ");
         }
-        output.push('\n');
-    }
 
-    print!("{}", output);
+        // Друкуємо зірочки
+        for _ in 0..stars {
+            print!("*");
+        }
+
+        println!();
+    }
 }
